@@ -104,7 +104,7 @@ function EditPage() {
 
         {/* Attribute Selection */}
         <div style={{ marginTop: '15px' }}>
-          <p>Select an Attribute:</p>
+          <p>Select a Main Stat:</p>
           <button
             type="button"
             style={getButtonStyle(attribute, 'Speed')}
@@ -125,6 +125,13 @@ function EditPage() {
             onClick={() => setAttribute('Stealth')}
           >
             Stealth
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(attribute, 'Magic')}
+            onClick={() => setAttribute('Magic')}
+          >
+            Magic
           </button>
         </div>
 
@@ -151,6 +158,13 @@ function EditPage() {
             onClick={() => setRole('Scout')}
           >
             Scout
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Tank')}
+            onClick={() => setRole('Tank')}
+          >
+            Tank
           </button>
         </div>
 
