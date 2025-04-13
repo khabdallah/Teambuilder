@@ -8,11 +8,19 @@ function EditPage() {
   const [crewmate, setCrewmate] = useState(null);
   const [name, setName] = useState('');
   const [attribute, setAttribute] = useState('');
+  const [role, setRole] = useState('');
+  const [ability, setAbility] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
+
+  // Helper to compute the extra info description.
+  const computeExtraInfo = (attribute, role, ability) => {
+    return `This crewmate is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
+  };
 
   useEffect(() => {
     const fetchCrewmate = async () => {
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from('crewmates')
         .select('*')
         .eq('id', id)
@@ -23,21 +31,42 @@ function EditPage() {
         setCrewmate(data);
         setName(data.name);
         setAttribute(data.attribute);
+        setRole(data.role);
+        setAbility(data.ability);
       }
     };
+
     fetchCrewmate();
   }, [id]);
 
+  const getButtonStyle = (selectedValue, option) => ({
+    backgroundColor: selectedValue === option ? '#d0ebff' : 'white',
+    padding: '10px 15px',
+    marginRight: '10px',
+    border: '1px solid #ccc',
+    cursor: 'pointer'
+  });
+
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!name || !attribute || !role || !ability) {
+      setErrorMsg('Please complete all fields.');
+      return;
+    }
+    setErrorMsg('');
+
+    const extra_info = computeExtraInfo(attribute, role, ability);
+
     const { error } = await supabase
       .from('crewmates')
-      .update({ name, attribute })
+      .update({ name, attribute, role, ability, extra_info })
       .eq('id', id);
+
     if (error) {
       console.error('Error updating crewmate:', error);
+      setErrorMsg(`Error updating crewmate: ${error.message}`);
     } else {
-      navigate('/');
+      navigate('/crew');
     }
   };
 
@@ -48,8 +77,9 @@ function EditPage() {
       .eq('id', id);
     if (error) {
       console.error('Error deleting crewmate:', error);
+      setErrorMsg(`Error deleting crewmate: ${error.message}`);
     } else {
-      navigate('/');
+      navigate('/crew');
     }
   };
 
@@ -59,31 +89,109 @@ function EditPage() {
     <div>
       <h2>Edit Crewmate</h2>
       <form onSubmit={handleUpdate}>
-        <label>
-          Name:
-          <input
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
+        {/* Name Field */}
         <div>
-          <p>Select an attribute:</p>
-          <button type="button" onClick={() => setAttribute('Speed')}>
+          <label>
+            Name:
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+        </div>
+
+        {/* Attribute Selection */}
+        <div style={{ marginTop: '15px' }}>
+          <p>Select an Attribute:</p>
+          <button
+            type="button"
+            style={getButtonStyle(attribute, 'Speed')}
+            onClick={() => setAttribute('Speed')}
+          >
             Speed
           </button>
-          <button type="button" onClick={() => setAttribute('Strength')}>
+          <button
+            type="button"
+            style={getButtonStyle(attribute, 'Strength')}
+            onClick={() => setAttribute('Strength')}
+          >
             Strength
           </button>
-          <button type="button" onClick={() => setAttribute('Stealth')}>
+          <button
+            type="button"
+            style={getButtonStyle(attribute, 'Stealth')}
+            onClick={() => setAttribute('Stealth')}
+          >
             Stealth
           </button>
         </div>
-        <button type="submit">Update Crewmate</button>
+
+        {/* Role Selection */}
+        <div style={{ marginTop: '15px' }}>
+          <p>Select a Role:</p>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Leader')}
+            onClick={() => setRole('Leader')}
+          >
+            Leader
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Support')}
+            onClick={() => setRole('Support')}
+          >
+            Support
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Scout')}
+            onClick={() => setRole('Scout')}
+          >
+            Scout
+          </button>
+        </div>
+
+        {/* Ability Selection */}
+        <div style={{ marginTop: '15px' }}>
+          <p>Select an Ability:</p>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Heal')}
+            onClick={() => setAbility('Heal')}
+          >
+            Heal
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Damage')}
+            onClick={() => setAbility('Damage')}
+          >
+            Damage
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Defend')}
+            onClick={() => setAbility('Defend')}
+          >
+            Defend
+          </button>
+        </div>
+
+        {errorMsg && (
+          <p style={{ marginTop: '10px', color: 'red' }}>{errorMsg}</p>
+        )}
+
+        <div style={{ marginTop: '15px' }}>
+          <button type="submit">Update Crewmate</button>
+        </div>
       </form>
       <br />
-      <button onClick={handleDelete}>Delete Crewmate</button>
+      <button onClick={handleDelete} style={{ marginTop: '10px' }}>
+        Delete Crewmate
+      </button>
     </div>
   );
 }

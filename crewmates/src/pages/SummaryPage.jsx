@@ -8,7 +8,7 @@ function SummaryPage() {
 
   useEffect(() => {
     const fetchCrewmates = async () => {
-      let { data: crewmatesData, error } = await supabase
+      const { data: crewmatesData, error } = await supabase
         .from('crewmates')
         .select('*')
         .order('created_at', { ascending: false });
@@ -28,10 +28,16 @@ function SummaryPage() {
       <Link to="/create">Create New Crewmate</Link>
       <ul>
         {crewmates.map((crew) => (
-          <li key={crew.id}>
-            <Link to={`/detail/${crew.id}`}>{crew.name}</Link> (Attribute: {crew.attribute})
-            {' - '}
-            <Link to={`/edit/${crew.id}`}>Edit</Link>
+          <li key={crew.id} style={{ marginBottom: '15px' }}>
+            <Link to={`/detail/${crew.id}`} style={{ fontWeight: 'bold' }}>
+              {crew.name}
+            </Link>
+            <div>
+              Attribute: {crew.attribute} | Role: {crew.role} | Ability: {crew.ability}
+            </div>
+            <div>
+              <Link to={`/edit/${crew.id}`}>Edit</Link>
+            </div>
           </li>
         ))}
       </ul>

@@ -6,59 +6,61 @@ import { useNavigate } from 'react-router-dom';
 function CreatePage() {
   const [name, setName] = useState('');
   const [attribute, setAttribute] = useState('');
+  const [role, setRole] = useState('');
+  const [ability, setAbility] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
-  // Local state to capture and display error messages
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Debug log for form submission
-    console.log('Attempting to add crewmate with:', { name, attribute });
-
-    // Input validation check (optional)
-    if (!name || !attribute) {
-      setErrorMsg('Please enter a name and select an attribute.');
-      return;
-    } else {
-      setErrorMsg('');
-    }
-
-    // Inserting the new crewmate into the Supabase database
-    const { data, error } = await supabase
-      .from('crewmates')
-      .insert([{ name, attribute }]);
-
-    // Log the result to the console
-    if (error) {
-      console.error('Error creating crewmate:', error);
-      setErrorMsg(`Error creating crewmate: ${error.message}`);
-      // Optionally, you can alert the error message
-      alert(`Error creating crewmate: ${error.message}`);
-    } else {
-      console.log('Crewmate added successfully!', data);
-      // Reset form fields (optional)
-      setName('');
-      setAttribute('');
-      // Navigate back to the summary page
-      navigate('/');
-    }
+  // This helper function builds a descriptive message based on the user's selections.
+  const computeExtraInfo = (attribute, role, ability) => {
+    return `This crewmate is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
   };
 
-  // Helper function for button styling based on selected attribute
-  const getButtonStyle = (attr) => ({
-    backgroundColor: attribute === attr ? '#d0ebff' : 'white',
+  // Helper function to style the buttons based on selection
+  const getButtonStyle = (selectedValue, option) => ({
+    backgroundColor: selectedValue === option ? '#d0ebff' : 'white',
     padding: '10px 15px',
     marginRight: '10px',
     border: '1px solid #ccc',
     cursor: 'pointer'
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate that all fields are provided.
+    if (!name || !attribute || !role || !ability) {
+      setErrorMsg('Please complete all fields.');
+      return;
+    }
+    setErrorMsg('');
+
+    // Compute the extra info message
+    const extra_info = computeExtraInfo(attribute, role, ability);
+
+    // Insert the new crewmate with extra_info into Supabase
+    const { error } = await supabase
+      .from('crewmates')
+      .insert([{ name, attribute, role, ability, extra_info }]);
+
+    if (error) {
+      console.error('Error creating crewmate:', error);
+      setErrorMsg(`Error creating crewmate: ${error.message}`);
+    } else {
+      // Optionally reset fields
+      setName('');
+      setAttribute('');
+      setRole('');
+      setAbility('');
+      navigate('/crew');
+    }
+  };
+
   return (
     <div>
       <h2>Create a New Crewmate</h2>
       <form onSubmit={handleSubmit}>
+        {/* Name Field */}
         <div>
           <label>
             Name:
@@ -71,48 +73,85 @@ function CreatePage() {
           </label>
         </div>
 
+        {/* Attribute Selection */}
         <div style={{ marginTop: '15px' }}>
-          <p>Select an attribute:</p>
+          <p>Select an Attribute:</p>
           <button
             type="button"
-            style={getButtonStyle('Speed')}
-            onClick={() => {
-              console.log('Attribute set to Speed');
-              setAttribute('Speed');
-            }}
+            style={getButtonStyle(attribute, 'Speed')}
+            onClick={() => setAttribute('Speed')}
           >
             Speed
           </button>
           <button
             type="button"
-            style={getButtonStyle('Strength')}
-            onClick={() => {
-              console.log('Attribute set to Strength');
-              setAttribute('Strength');
-            }}
+            style={getButtonStyle(attribute, 'Strength')}
+            onClick={() => setAttribute('Strength')}
           >
             Strength
           </button>
           <button
             type="button"
-            style={getButtonStyle('Stealth')}
-            onClick={() => {
-              console.log('Attribute set to Stealth');
-              setAttribute('Stealth');
-            }}
+            style={getButtonStyle(attribute, 'Stealth')}
+            onClick={() => setAttribute('Stealth')}
           >
             Stealth
           </button>
         </div>
 
-        {/* Display the currently selected attribute for debugging */}
-        {attribute && (
-          <p style={{ marginTop: '10px' }}>
-            Selected Attribute: <strong>{attribute}</strong>
-          </p>
-        )}
+        {/* Role Selection */}
+        <div style={{ marginTop: '15px' }}>
+          <p>Select a Role:</p>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Leader')}
+            onClick={() => setRole('Leader')}
+          >
+            Leader
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Support')}
+            onClick={() => setRole('Support')}
+          >
+            Support
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(role, 'Scout')}
+            onClick={() => setRole('Scout')}
+          >
+            Scout
+          </button>
+        </div>
 
-        {/* Error Message Display */}
+        {/* Ability Selection */}
+        <div style={{ marginTop: '15px' }}>
+          <p>Select an Ability:</p>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Heal')}
+            onClick={() => setAbility('Heal')}
+          >
+            Heal
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Damage')}
+            onClick={() => setAbility('Damage')}
+          >
+            Damage
+          </button>
+          <button
+            type="button"
+            style={getButtonStyle(ability, 'Defend')}
+            onClick={() => setAbility('Defend')}
+          >
+            Defend
+          </button>
+        </div>
+
+        {/* Display selected attribute info (for user feedback) */}
         {errorMsg && (
           <p style={{ marginTop: '10px', color: 'red' }}>{errorMsg}</p>
         )}

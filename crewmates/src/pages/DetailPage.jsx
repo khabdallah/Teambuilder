@@ -9,7 +9,7 @@ function DetailPage() {
 
   useEffect(() => {
     const fetchCrewmate = async () => {
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from('crewmates')
         .select('*')
         .eq('id', id)
@@ -20,6 +20,7 @@ function DetailPage() {
         setCrewmate(data);
       }
     };
+
     fetchCrewmate();
   }, [id]);
 
@@ -29,10 +30,12 @@ function DetailPage() {
     <div>
       <h2>{crewmate.name}</h2>
       <p>Attribute: {crewmate.attribute}</p>
+      <p>Role: {crewmate.role}</p>
+      <p>Ability: {crewmate.ability}</p>
       <p>Extra Info: {crewmate.extra_info || 'No extra information available.'}</p>
       <Link to={`/edit/${crewmate.id}`}>Edit Crewmate</Link>
       <br />
-      <Link to="/">Back to Crewmate List</Link>
+      <Link to="/crew">Back to Crewmate List</Link>
     </div>
   );
 }
