@@ -13,7 +13,7 @@ function CreatePage() {
 
   // This helper function builds a descriptive message based on the user's selections.
   const computeExtraInfo = (attribute, role, ability) => {
-    return `This crewmate is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
+    return `This member is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
   };
 
   // Helper function to style the buttons based on selection
@@ -58,7 +58,7 @@ function CreatePage() {
 
   return (
     <div>
-      <h2>Create a New Crewmate</h2>
+      <h2>Create a New Party Member</h2>
       <form onSubmit={handleSubmit}>
         {/* Name Field */}
         <div>
@@ -171,7 +171,7 @@ function CreatePage() {
         )}
 
         <div style={{ marginTop: '15px' }}>
-          <button type="submit">Add Crewmate</button>
+          <button type="submit">Add Member</button>
         </div>
       </form>
     </div>

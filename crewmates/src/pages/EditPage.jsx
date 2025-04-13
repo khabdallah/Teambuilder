@@ -15,7 +15,7 @@ function EditPage() {
 
   // Helper to compute the extra info description.
   const computeExtraInfo = (attribute, role, ability) => {
-    return `This crewmate is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
+    return `This member is a ${role} known for their ${attribute.toLowerCase()} skills and a remarkable ability to ${ability.toLowerCase()}.`;
   };
 
   useEffect(() => {
@@ -87,7 +87,7 @@ function EditPage() {
 
   return (
     <div>
-      <h2>Edit Crewmate</h2>
+      <h2>Edit Party Member</h2>
       <form onSubmit={handleUpdate}>
         {/* Name Field */}
         <div>
@@ -199,12 +199,12 @@ function EditPage() {
         )}
 
         <div style={{ marginTop: '15px' }}>
-          <button type="submit">Update Crewmate</button>
+          <button type="submit">Update Party Member</button>
         </div>
       </form>
       <br />
       <button onClick={handleDelete} style={{ marginTop: '10px' }}>
-        Delete Crewmate
+        Delete Party Member
       </button>
     </div>
   );

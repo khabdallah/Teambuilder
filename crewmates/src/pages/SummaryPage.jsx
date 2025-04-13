@@ -33,7 +33,7 @@ function SummaryPage() {
 
   return (
     <div>
-      <h2>Your Crewmates</h2>
+      <h2>Your Party Members</h2>
       <Link 
         to="/create"
         style={{ 
@@ -47,7 +47,7 @@ function SummaryPage() {
           textDecoration: 'none'
         }}
       >
-        Create New Crewmate
+        Create New Party Member
       </Link>
       
       <div 
