@@ -32,7 +32,7 @@ function DetailPage() {
       <p>Attribute: {crewmate.attribute}</p>
       <p>Role: {crewmate.role}</p>
       <p>Ability: {crewmate.ability}</p>
-      <p>Extra Info: {crewmate.extra_info || 'No extra information available.'}</p>
+      <p> {crewmate.extra_info || 'No extra information available.'}</p>
       <Link to={`/edit/${crewmate.id}`}>Edit Crewmate</Link>
       <br />
       <Link to="/crew">Back to Crewmate List</Link>

@@ -1,39 +1,16 @@
 // src/components/Sidebar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../App.css'; // Ensure CSS is imported if not imported globally
 
 function Sidebar() {
-  const sidebarStyles = {
-    width: '200px',
-    backgroundColor: '#f0f0f0',
-    padding: '20px',
-    height: '100vh',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    boxSizing: 'border-box'
-  };
-
-  const linkStyles = {
-    display: 'block',
-    marginBottom: '10px',
-    textDecoration: 'none',
-    color: '#333'
-  };
-
   return (
-    <div style={sidebarStyles}>
+    <div className="sidebar">
       <h3>Navigation</h3>
       <nav>
-        <Link style={linkStyles} to="/">
-          Home
-        </Link>
-        <Link style={linkStyles} to="/create">
-          Create
-        </Link>
-        <Link style={linkStyles} to="/crew">
-          Summary
-        </Link>
+        <Link to="/">Home</Link>
+        <Link to="/create">Create</Link>
+        <Link to="/crew">Summary</Link>
       </nav>
     </div>
   );

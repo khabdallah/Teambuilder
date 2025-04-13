@@ -1,22 +1,13 @@
 // src/components/Layout.js
 import React from 'react';
 import Sidebar from './Sidebar';
+import '../App.css'; // Import the CSS file
 
 function Layout({ children }) {
-  const layoutStyles = {
-    display: 'flex'
-  };
-
-  const contentStyles = {
-    marginLeft: '220px', // leave enough space for the sidebar plus some padding
-    padding: '20px',
-    width: '100%'
-  };
-
   return (
-    <div style={layoutStyles}>
+    <div className="layout">
       <Sidebar />
-      <div style={contentStyles}>
+      <div className="content">
         {children}
       </div>
     </div>

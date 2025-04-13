@@ -7,6 +7,7 @@ import CreatePage from './pages/CreatePage';
 import SummaryPage from './pages/SummaryPage';
 import EditPage from './pages/EditPage';
 import DetailPage from './pages/DetailPage';
+import './App.css'
 
 function App() {
   return (
